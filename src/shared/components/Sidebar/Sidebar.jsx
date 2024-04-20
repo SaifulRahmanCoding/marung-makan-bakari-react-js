@@ -80,7 +80,7 @@ export default function Sidebar({ isVisible, setVisible }) {
               </li>
               <li className="cursor-pointer">
                 <Link
-                  to="/dashboard/menu"
+                  to="/dashboard/menus"
                   className="text-white text-decoration-none"
                 >
                   <i className="me-3">
@@ -91,7 +91,7 @@ export default function Sidebar({ isVisible, setVisible }) {
               </li>
               <li className="cursor-pointer">
                 <Link
-                  to="/dashboard/table"
+                  to="/dashboard/tables"
                   className="text-white text-decoration-none"
                 >
                   <i className="me-3">
@@ -102,7 +102,7 @@ export default function Sidebar({ isVisible, setVisible }) {
               </li>
               <li className="cursor-pointer">
                 <Link
-                  to="/dashboard/customer"
+                  to="/dashboard/customers"
                   className="text-white text-decoration-none"
                 >
                   <i className="me-3">

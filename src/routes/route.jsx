@@ -29,7 +29,7 @@ const router = createBrowserRouter([
                 element: <Dashboard />
             },
             {
-                path: "table",
+                path: "tables",
                 element: <Table />,
                 children: [
                     {
@@ -41,7 +41,7 @@ const router = createBrowserRouter([
                         element: <TableForm />,
                     },
                     {
-                        path: "update",
+                        path: "update/:id",
                         element: <TableForm />,
                     },
                 ],
