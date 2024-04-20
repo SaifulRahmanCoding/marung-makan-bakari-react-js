@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Rancho&display=swap');
+
+$light: #eef9ff;
+$dark: #0c0c04;
+$primary: #068191;
+$secondary: #0d445b;
+$info: #23abb9;
+$success: #04c066;
+$warning: #efd103;
+$danger: #ff1521;
+
+body {
+  font-family: "Montserrat", sans-serif;
+}
+
+.required {
+  position: relative;
+}
+
+.required::after {
+  content: "*";
+  color: $danger;
+  margin-left: 2px;
+  position: absolute;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.show-custom {
+  min-height: 100dvh;
+  width: 300px;
+}
+
+.hide-custom {
+  display: none;
+  min-height: 100dvh;
+}
+.welcome-dashboard {
+  background-color: #cefee78d;
+  color: #66bc6b !important;
+}
+
+@import "node_modules/bootstrap/scss/bootstrap";
