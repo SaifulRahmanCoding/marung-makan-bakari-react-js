@@ -5,8 +5,6 @@ import {
   IconDoorExit,
   IconHome2,
   IconListDetails,
-  IconReceipt,
-  IconUser,
   IconUsers,
 } from "@tabler/icons-react";
 import PropTypes from "prop-types";
@@ -14,6 +12,16 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 export default function Sidebar({ isVisible, setVisible, handleLogout }) {
+  const user = localStorage.getItem('user');
+  const { roles } = JSON.parse(user);
+  let role;
+  if (roles[0] === "ROLE_SUPER_ADMIN") {
+    role = "Super Admin";
+  } else if (roles[0] === "ROLE_ADMIN") {
+    role = "Admin";
+  } else {
+    role = "Customer";
+  }
   useEffect(() => {
     const handleResize = () => {
       setVisible(window.innerWidth >= 800);
@@ -31,13 +39,13 @@ export default function Sidebar({ isVisible, setVisible, handleLogout }) {
     >
       <div className="font-logo text-center mb-5">
         <Link to="/" className="text-white text-decoration-none" href="/">
-          <h4>
+          <h5>
             <i>
               Warung Makan <b>Bakari</b>
             </i>
-          </h4>
+          </h5>
         </Link>
-        <h2 className="fs-6 my-4 font-primary fw-bold">Backoffice V1.0.0</h2>
+        <h2 className="fs-6 my-4 font-primary fw-bold">{role}</h2>
       </div>
       <nav>
         <ul className="d-flex flex-column gap-3 nav-list list-unstyled">
@@ -104,30 +112,6 @@ export default function Sidebar({ isVisible, setVisible, handleLogout }) {
               </li>
             </ul>
           </div>
-          <p className="fw-bold mt-4">Transaction</p>
-          <li className="cursor-pointer text-white">
-            <Link
-              className="text-white text-decoration-none"
-              to="/dashboard/transaction"
-            >
-              <i className="me-3">
-                <IconReceipt />
-              </i>
-              <span>Transaction</span>
-            </Link>
-          </li>
-          <p className="fw-bold mt-4">Settings</p>
-          <li className="cursor-pointer text-white">
-            <Link
-              className="text-white text-decoration-none"
-              to="/dashboard/user"
-            >
-              <i className="me-3">
-                <IconUser />
-              </i>
-              <span>User</span>
-            </Link>
-          </li>
           <hr />
           <li
             onClick={handleLogout}
