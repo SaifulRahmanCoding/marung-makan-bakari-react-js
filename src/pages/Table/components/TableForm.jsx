@@ -45,7 +45,6 @@ function TableForm() {
                     id: id,
                     name: data.name,
                 };
-                console.log(table);
                 await tableService.update(table);
             } else {
                 await tableService.create(data);
