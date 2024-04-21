@@ -6,16 +6,29 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import TableService from "@/services/TableService";
 import { useEffect } from "react";
+import { useContext } from "react";
+import { MyContext } from "@/MyContext";
+import Swal from 'sweetalert2';
 
 function TableList() {
     const [tables, setTables] = useState([]);
     const tableService = useMemo(() => TableService(), []);
+    const { showPopup } = useContext(MyContext);
 
     const handleDelete = async (id) => {
-        if (!confirm("apakah yakin product ini ingin dihapus?")) return;
+        const confirmation = await Swal.fire({
+            title: 'Hapus Data',
+            text: 'Apakah Anda yakin ingin melanjutkan?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya',
+            cancelButtonText: 'Tidak',
+        });
+        
+        if (!confirmation.isConfirmed) return;
         try {
             const response = await tableService.deleteById(id);
-
+            showPopup("Hapus", response.statusCode);
             if (response.statusCode == 200) {
                 const data = await tableService.getAll();
                 setTables(data.data);

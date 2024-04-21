@@ -8,6 +8,8 @@ import { useEffect } from "react";
 import { IconX } from "@tabler/icons-react";
 import { IconDeviceFloppy } from "@tabler/icons-react";
 import { useMemo } from "react";
+import { useContext } from "react";
+import { MyContext } from "@/MyContext";
 
 const schema = z.object({
     name: z.string().min(1, "name wajib di isi!"),
@@ -28,6 +30,7 @@ function TableForm() {
     const navigate = useNavigate();
     const tableService = useMemo(() => TableService(), []);
     const { id } = useParams();
+    const { showPopup } = useContext(MyContext);
 
     const handleBack = () => {
         clearForm();
@@ -45,9 +48,11 @@ function TableForm() {
                     id: id,
                     name: data.name,
                 };
-                await tableService.update(table);
+                const response = await tableService.update(table);
+                showPopup("Update", response.statusCode)
             } else {
-                await tableService.create(data);
+                const response = await tableService.create(data);
+                showPopup("Tambah", response.statusCode)
             }
             clearForm();
             navigate("/dashboard/tables");

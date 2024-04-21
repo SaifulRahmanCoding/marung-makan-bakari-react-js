@@ -8,6 +8,8 @@ import * as z from "zod";
 import MenuService from "@services/MenuService";
 import { useEffect } from "react";
 import { useMemo } from "react";
+import { MyContext } from "@/MyContext";
+import { useContext } from "react";
 
 const schema = z.object({
   id: z.string().optional(),
@@ -32,6 +34,7 @@ function MenuForm() {
     mode: "onChange",
     resolver: zodResolver(schema),
   });
+  const { showPopup } = useContext(MyContext);
   const navigate = useNavigate();
   const menuService = useMemo(() => MenuService(), []);
   const { id } = useParams();
@@ -65,7 +68,8 @@ function MenuForm() {
         } else {
           form.append("image", previewImage);
         }
-        await menuService.update(form);
+        const response = await menuService.update(form);
+        showPopup("Update", response.statusCode);
       } else {
         const menu = {
           name: data.name,
@@ -73,7 +77,9 @@ function MenuForm() {
         };
         form.append("menu", JSON.stringify(menu));
         form.append("image", data.image[0]);
-        await menuService.create(form);
+        const response = await menuService.create(form);
+        console.log(response.statusCode);
+        showPopup("Tambah", response.statusCode);
       }
       clearForm();
       navigate("/dashboard/menus");

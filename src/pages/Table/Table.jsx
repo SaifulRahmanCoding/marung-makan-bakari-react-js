@@ -10,4 +10,4 @@ function Table() {
     )
 }
 
-export default Table
+export default Table;

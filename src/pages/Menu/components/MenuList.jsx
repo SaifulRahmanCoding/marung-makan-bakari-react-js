@@ -8,12 +8,16 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { MyContext } from "@/MyContext";
+import { useContext } from "react";
+import Swal from 'sweetalert2';
 
 function MenuList() {
     const [menus, setMenus] = useState([]);
     const [searchParam, setSearchParam] = useSearchParams();
     const menuService = useMemo(() => MenuService(), []);
     const { handleSubmit, register } = useForm();
+    const { showPopup } = useContext(MyContext);
 
     const search = searchParam.get("q") || "";
     const page = searchParam.get("page") || "1";
@@ -27,6 +31,7 @@ function MenuList() {
         hasPrevious: false,
         hasNext: false,
     });
+    let index = (paging.page - 1) * paging.size;
 
     const onSubmitSearch = ({ search }) => {
         setSearchParam({ q: search || "", page: page, size: size });
@@ -49,9 +54,18 @@ function MenuList() {
     };
 
     const handleDelete = async (id) => {
-        if (!confirm("apakah yakin product ini ingin dihapus?")) return;
+        const confirmation = await Swal.fire({
+            title: 'Hapus Data',
+            text: 'Apakah Anda yakin ingin melanjutkan?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya',
+            cancelButtonText: 'Tidak',
+        });
+        if (!confirmation.isConfirmed) return;
         try {
             const response = await menuService.deleteById(id);
+            showPopup("Hapus", response.statusCode);
             if (response.statusCode == 200) {
                 const data = await menuService.getAll();
                 setMenus(data.data);
@@ -126,7 +140,7 @@ function MenuList() {
                         </tr>
                     </thead>
                     <tbody>
-                        {menus.map((menu, index) => {
+                        {menus.map((menu) => {
                             return (
                                 <tr key={menu.id}>
                                     <td>{++index}</td>
@@ -167,7 +181,7 @@ function MenuList() {
             </div>
 
             <div className="d-flex align-items-center justify-content-between mt-4">
-                <small>Show data 1 of 10</small>
+                <small>Show data {paging.size} of {paging.totalElement}</small>
                 <nav aria-label="Page navigation example">
                     <ul className="pagination">
                         <li
