@@ -1,7 +1,6 @@
 import {
-  IconAccessible,
+  IconBrandDatabricks,
   IconApps,
-  IconAsset,
   IconChevronDown,
   IconDoorExit,
   IconHome2,
@@ -32,11 +31,11 @@ export default function Sidebar({ isVisible, setVisible, handleLogout }) {
     >
       <div className="font-logo text-center mb-5">
         <Link to="/" className="text-white text-decoration-none" href="/">
-          <h2 className="fs-2">
+          <h4>
             <i>
               Warung Makan <b>Bakari</b>
             </i>
-          </h2>
+          </h4>
         </Link>
         <h2 className="fs-6 my-4 font-primary fw-bold">Backoffice V1.0.0</h2>
       </div>
@@ -87,7 +86,7 @@ export default function Sidebar({ isVisible, setVisible, handleLogout }) {
                   className="text-white text-decoration-none"
                 >
                   <i className="me-3">
-                    <IconAsset />
+                    <IconBrandDatabricks />
                   </i>
                   <span>Table</span>
                 </Link>
@@ -101,17 +100,6 @@ export default function Sidebar({ isVisible, setVisible, handleLogout }) {
                     <IconUsers />
                   </i>
                   <span>Customer</span>
-                </Link>
-              </li>
-              <li className="cursor-pointer">
-                <Link
-                  className="text-white text-decoration-none"
-                  to="/dashboard/admin"
-                >
-                  <i className="me-3">
-                    <IconAccessible />
-                  </i>
-                  <span>Admin</span>
                 </Link>
               </li>
             </ul>

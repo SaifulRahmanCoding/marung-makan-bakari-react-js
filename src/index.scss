@@ -41,5 +41,7 @@ body {
   background-color: #cefee78d;
   color: #66bc6b !important;
 }
-
+.badge-status-member{
+  cursor: pointer;
+}
 @import "node_modules/bootstrap/scss/bootstrap";

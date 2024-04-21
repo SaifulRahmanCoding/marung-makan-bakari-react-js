@@ -12,6 +12,7 @@ import { useContext } from "react";
 import { MyContext } from "@/MyContext";
 
 const schema = z.object({
+    id: z.string().optional(),
     name: z.string().min(1, "name wajib di isi!"),
 });
 
@@ -24,7 +25,7 @@ function TableForm() {
         reset,
         setValue,
     } = useForm({
-        mode: "onTouched",
+        mode: "onChange",
         resolver: zodResolver(schema),
     });
     const navigate = useNavigate();

@@ -9,6 +9,9 @@ import TableForm from "@/pages/Table/components/TableForm";
 import Menu from "@/pages/Menu/Menu";
 import MenuList from "@/pages/Menu/components/MenuList";
 import MenuForm from "@/pages/Menu/components/MenuForm";
+import Customer from "@/pages/Customer/Customer";
+import CustomerList from "@/pages/Customer/components/CustomerList";
+import CosutomerForm from "@/pages/Customer/components/CosutomerForm";
 
 const router = createBrowserRouter([
     {
@@ -64,6 +67,24 @@ const router = createBrowserRouter([
                     {
                         path: "update/:id",
                         element: <MenuForm />,
+                    },
+                ],
+            },
+            {
+                path: "customers",
+                element: <Customer />,
+                children: [
+                    {
+                        index: true,
+                        element: <CustomerList />,
+                    },
+                    {
+                        path: "new",
+                        element: <CosutomerForm />,
+                    },
+                    {
+                        path: "update/:id",
+                        element: <CosutomerForm />,
                     },
                 ],
             },

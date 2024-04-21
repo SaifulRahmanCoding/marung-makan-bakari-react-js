@@ -24,7 +24,7 @@ function TableList() {
             confirmButtonText: 'Ya',
             cancelButtonText: 'Tidak',
         });
-        
+
         if (!confirmation.isConfirmed) return;
         try {
             const response = await tableService.deleteById(id);
@@ -58,7 +58,7 @@ function TableList() {
                     <i className="me-2">
                         <IconPlus />
                     </i>
-                    Tambah Produk
+                    Tambah Table
                 </Link>
             </div>
             <hr />
