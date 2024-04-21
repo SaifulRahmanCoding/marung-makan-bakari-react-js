@@ -8,6 +8,7 @@ import AuthService from "@services/AuthService";
 import { useNavigate } from "react-router-dom";
 import { useMemo } from "react";
 import { useEffect } from "react";
+import Swal from 'sweetalert2';
 
 const schema = z.object({
   username: z.string().min(1, "Username tidak boleh kosong"),
@@ -29,10 +30,27 @@ function Login() {
     resolver: zodResolver(schema),
   });
 
+  const showPopup = (title, description, icon) => {
+    Swal.fire({
+      title: title,
+      text: description,
+      icon: icon,
+      showConfirmButton: false,
+      timer: 2000
+    });
+  };
+
   const onSubmit = async (data) => {
     try {
-      const response = await authService.login(data);
+      const response = await authService.login(data)
+        .catch(error => {
+          if (error.response.status === 401) {
+            showPopup("Gagal Loign!", "Username atau Password Salah", "error");
+          }
+        })
+        ;
       if (response && response.statusCode === 200) {
+        showPopup("Sukses Loign!", "", "success");
         localStorage.setItem("user", JSON.stringify(response.data));
         navigate("/dashboard");
       }
@@ -90,9 +108,8 @@ function Login() {
                 type="text"
                 name="username"
                 id="username"
-                className={`form-control rounded-0 border-0 border-bottom ${
-                  errors.username && "is-invalid"
-                }`}
+                className={`form-control rounded-0 border-0 border-bottom ${errors.username && "is-invalid"
+                  }`}
               />
               {errors.username && (
                 <div className="invalid-feedback">
@@ -107,9 +124,8 @@ function Login() {
                 type="password"
                 name="password"
                 id="password"
-                className={`form-control rounded-0 border-0 border-bottom ${
-                  errors.password && "is-invalid"
-                }`}
+                className={`form-control rounded-0 border-0 border-bottom ${errors.password && "is-invalid"
+                  }`}
               />
               {errors.password && (
                 <div className="invalid-feedback">

@@ -12,16 +12,9 @@ import {
 } from "@tabler/icons-react";
 import PropTypes from "prop-types";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-export default function Sidebar({ isVisible, setVisible }) {
-  const navigate = useNavigate();
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    navigate("/login");
-  };
-
+export default function Sidebar({ isVisible, setVisible, handleLogout }) {
   useEffect(() => {
     const handleResize = () => {
       setVisible(window.innerWidth >= 800);
@@ -34,15 +27,14 @@ export default function Sidebar({ isVisible, setVisible }) {
 
   return (
     <div
-      className={`bg-primary text-white p-4 shadow ${
-        isVisible ? "show-custom" : "hide-custom"
-      }`}
+      className={`bg-primary text-white p-4 shadow ${isVisible ? "show-custom" : "hide-custom"
+        }`}
     >
       <div className="font-logo text-center mb-5">
         <Link to="/" className="text-white text-decoration-none" href="/">
           <h2 className="fs-2">
             <i>
-               Warung Makan <b>Bakari</b>
+              Warung Makan <b>Bakari</b>
             </i>
           </h2>
         </Link>
@@ -150,8 +142,7 @@ export default function Sidebar({ isVisible, setVisible }) {
           </li>
           <hr />
           <li
-            data-bs-toggle="modal"
-            data-bs-target="#logoutModal"
+            onClick={handleLogout}
             className="cursor-pointer text-white"
           >
             <i className="me-3">
@@ -162,41 +153,6 @@ export default function Sidebar({ isVisible, setVisible }) {
         </ul>
       </nav>
 
-      <div className="modal fade" tabIndex={-1} id="logoutModal">
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title text-dark">Logout</h5>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div className="modal-body">
-              <p className="text-dark">Apakah yakin ingin logout?</p>
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Batal
-              </button>
-              <button
-                type="button"
-                className="btn btn-primary"
-                data-bs-dismiss="modal"
-                onClick={handleLogout}
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
@@ -204,4 +160,5 @@ export default function Sidebar({ isVisible, setVisible }) {
 Sidebar.propTypes = {
   isVisible: PropTypes.bool,
   setVisible: PropTypes.func,
+  handleLogout: PropTypes.func,
 };

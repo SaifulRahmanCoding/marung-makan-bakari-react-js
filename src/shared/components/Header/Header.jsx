@@ -2,7 +2,7 @@ import { IconSettings2, IconDoorExit } from "@tabler/icons-react";
 import { IconMenu2 } from "@tabler/icons-react";
 import PropTypes from "prop-types";
 
-export default function Header({ toggleSidebar }) {
+export default function Header({ toggleSidebar, handleLogout }) {
   return (
     <div className="d-flex justify-content-between shadow-sm px-4 py-2">
       <div className="d-flex align-items-center">
@@ -42,7 +42,7 @@ export default function Header({ toggleSidebar }) {
           </button>
         </li>
         <li>
-          <button className="dropdown-item" href="#">
+          <button className="dropdown-item" onClick={handleLogout}>
             <i className="me-2">
               <IconDoorExit size={16} />
             </i>
@@ -56,4 +56,5 @@ export default function Header({ toggleSidebar }) {
 
 Header.propTypes = {
   toggleSidebar: PropTypes.func,
+  handleLogout: PropTypes.func,
 };
