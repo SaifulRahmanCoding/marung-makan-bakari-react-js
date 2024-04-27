@@ -1,23 +1,23 @@
-import { IconEditCircle } from "@tabler/icons-react";
-import { IconTrash } from "@tabler/icons-react";
-import { IconPlus } from "@tabler/icons-react";
-import { useMemo } from "react";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import {IconEditCircle} from "@tabler/icons-react";
+import {IconTrash} from "@tabler/icons-react";
+import {IconPlus} from "@tabler/icons-react";
+import {useMemo} from "react";
+import {useState} from "react";
+import {Link} from "react-router-dom";
 import CustomerService from "@/services/CustomerService";
-import { useEffect } from "react";
-import { useContext } from "react";
-import { MyContext } from "@/MyContext";
+import {useEffect} from "react";
+import {useContext} from "react";
+import {MyContext} from "@/MyContext";
 import Swal from 'sweetalert2';
-import { useSearchParams } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import {useSearchParams} from "react-router-dom";
+import {useForm} from "react-hook-form";
 
-function CustomerList() {
+function CustomerList({pageName}) {
     const [customers, setCustomers] = useState([]);
     const [searchParam, setSearchParam] = useSearchParams();
-    const { handleSubmit, register } = useForm();
+    const {handleSubmit, register} = useForm();
     const customerService = useMemo(() => CustomerService(), []);
-    const { showPopup } = useContext(MyContext);
+    const {showPopup} = useContext(MyContext);
     const [reload, setReload] = useState(false);
 
     const search = searchParam.get("q") || "";
@@ -33,24 +33,28 @@ function CustomerList() {
         hasNext: false,
     });
     let index = (paging.page - 1) * paging.size;
-    const onSubmitSearch = ({ search }) => {
-        setSearchParam({ q: search || "", page: page, size: size });
+    const onSubmitSearch = ({search}) => {
+        setSearchParam({q: search || "", page: page, size: size});
     }
     const handleNavigatePage = (number) => {
-        setSearchParam({ q: "", page: +page + number, size: size });
+        setSearchParam({q: "", page: +page + number, size: size});
     }
 
     const navigatePage = (page) => {
         if (!page) return;
-        setSearchParam({ q: "", page: page, size: size });
+        setSearchParam({q: "", page: page, size: size});
     };
+
+    function capitalizeFirstWord(sentence) {
+        return sentence.charAt(0).toUpperCase() + sentence.slice(1);
+    }
 
     const onChangeSize = (e) => {
         setPaging({
             ...paging,
             size: e.target.value,
         });
-        setSearchParam({ size: e.target.value });
+        setSearchParam({size: e.target.value});
     };
     const handleDelete = async (id) => {
         const confirmation = await Swal.fire({
@@ -66,7 +70,7 @@ function CustomerList() {
         try {
             const response = await customerService.deleteById(id);
             showPopup("Hapus", response.statusCode);
-            if (response.statusCode == 200) {
+            if (response.statusCode === 200) {
                 const data = await customerService.getAll();
                 setCustomers(data.data);
             }
@@ -92,39 +96,40 @@ function CustomerList() {
             console.log(error);
         }
     }
-
     useEffect(() => {
-        const getProduct = async () => {
+        const getCustomers = async () => {
             try {
                 const data = await customerService.getAll({
                     q: search,
                     size: size,
                     page: page,
                 });
-                setCustomers(data.data);
+                pageName !== "admin" ? setCustomers(data.data.filter((cs) => cs.role === "ROLE_CUSTOMER")) : setCustomers(data.data.filter((cs) => cs.role === "ROLE_ADMIN"));
                 setPaging(data.paging);
             } catch (error) {
                 console.log(error);
             }
         };
-        getProduct();
-    }, [customerService, search, searchParam, size, page, reload]);
+        getCustomers();
+    }, [customerService, search, searchParam, size, page, reload, pageName]);
 
     return (
         <div className="p-4 shadow-sm rounded-2">
             <div className="d-flex justify-content-between align-items-center mb-3">
-                <h3>Customer List</h3>
-                <Link className="btn btn-primary" to="/dashboard/customers/new">
+                <h3>{capitalizeFirstWord(pageName.toString())} List</h3>
+                <Link className="btn btn-primary"
+                      to={pageName !== "admin" ? "/dashboard/customers/new" : "/dashboard/admin/new"}>
                     <i className="me-2">
-                        <IconPlus />
+                        <IconPlus/>
                     </i>
-                    Tambah Customer
+                    Tambah {capitalizeFirstWord(pageName.toString())}
                 </Link>
             </div>
             <div className="d-flex justify-content-between align-items-center mt-4">
                 <div className="row">
                     <div className="col-12">
-                        <select onChange={onChangeSize} value={size} className="form-select" name="sizeOpt" id="sizeOpt">
+                        <select onChange={onChangeSize} value={size} className="form-select" name="sizeOpt"
+                                id="sizeOpt">
                             <option value="5">5</option>
                             <option value="10">10</option>
                             <option value="25">25</option>
@@ -145,59 +150,71 @@ function CustomerList() {
                 </form>
             </div>
 
-            <hr />
+            <hr/>
             <div className="table-responsive mt-4">
                 <table className="table overflow-auto">
                     <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Nama</th>
-                            <th>Nomor Handpone</th>
-                            <th>Status Member</th>
-                            <th>Aksi</th>
-                        </tr>
+                    <tr>
+                        <th>No</th>
+                        <th>Username</th>
+                        <th>Nama</th>
+                        <th>Nomor Handpone</th>
+                        <th>Status Member</th>
+                        <th>Aksi</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        {customers.map((customer) => {
-                            return (
-                                <tr key={customer.id}>
-                                    <td>{++index}</td>
-                                    <td>{customer.name}</td>
-                                    <td>{customer.mobilePhoneNo}</td>
-                                    <td>
-                                        {
-                                            customer.isMember
-                                                ? <><span onClick={() => updateStatusMember(customer.id, false)} className="badge text-bg-success text-white badge-status-member">Member</span></>
-                                                : <><span onClick={() => updateStatusMember(customer.id, true)} className="badge text-bg-danger text-white badge-status-member">Bukan Member</span></>
-                                        }
-                                    </td>
-                                    <td>
-                                        <div className="btn-group">
-                                            <Link
-                                                to={`/dashboard/customers/update/${customer.id}`}
-                                                className="btn btn-primary">
-                                                <i>
-                                                    <IconEditCircle />
-                                                </i>
-                                            </Link>
-                                            <button
-                                                onClick={() => handleDelete(customer.id)}
-                                                className="btn btn-danger">
-                                                <i className="text-white">
-                                                    <IconTrash />
-                                                </i>
-                                            </button>
-                                        </div>
-                                    </td>
+                    {
+                        (customers.length < 1)
+                            ?
+                            <>
+                                <tr>
+                                    <td colSpan="6" style={{textAlign: "center"}}>Tidak Ada Data</td>
                                 </tr>
-                            );
-                        })}
+                            </>
+                            :
+                            customers.map((customer) => {
+                                return (
+                                    <tr key={customer.id}>
+                                        <td>{++index}</td>
+                                        <td>{customer.username}</td>
+                                        <td>{customer.name}</td>
+                                        <td>{customer.mobilePhoneNo}</td>
+                                        <td>
+                                            <div onClick={() => updateStatusMember(customer.id, !customer.isMember)}
+                                                 className="form-check form-switch">
+                                                <input className="form-check-input" style={{width: 40, height: 20}}
+                                                       type="checkbox"
+                                                       role="switch"
+                                                       id={`isMember${index}`} checked={customer.isMember}/>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div className="btn-group">
+                                                <Link
+                                                    to={pageName !== "admin" ? `/dashboard/customers/update/${customer.id}` : `/dashboard/admin/update/${customer.id}`}
+                                                    className="btn btn-primary">
+                                                    <i><IconEditCircle/></i>
+                                                </Link>
+                                                <button
+                                                    onClick={() => handleDelete(customer.id)}
+                                                    className="btn btn-danger">
+                                                    <i className="text-white">
+                                                        <IconTrash/>
+                                                    </i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
                     </tbody>
                 </table>
             </div>
 
             <div className="d-flex align-items-center justify-content-between mt-4">
-                <small>Show data {paging.size} of {paging.totalElement}</small>
+                <small>Show
+                    data {((paging.page - 1) * paging.size) + 1} to {paging.size * paging.page > paging.totalElement ? paging.totalElement : paging.size * paging.page} of {paging.totalElement} entries</small>
                 <nav aria-label="Page navigation example">
                     <ul className="pagination">
                         <li
@@ -217,7 +234,7 @@ function CustomerList() {
                                 <li
                                     key={index}
                                     className={`page-item ${paging.page === currentPage ? "active" : ""
-                                        }`}
+                                    }`}
                                 >
                                     <button
                                         onClick={() => navigatePage(currentPage)}

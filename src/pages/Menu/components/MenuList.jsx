@@ -1,23 +1,23 @@
-import { IconEditCircle } from "@tabler/icons-react";
-import { IconTrash } from "@tabler/icons-react";
-import { IconPlus } from "@tabler/icons-react";
-import { useMemo } from "react";
-import { Link } from "react-router-dom";
+import {IconEditCircle} from "@tabler/icons-react";
+import {IconTrash} from "@tabler/icons-react";
+import {IconPlus} from "@tabler/icons-react";
+import {useMemo} from "react";
+import {Link} from "react-router-dom";
 import MenuService from "@/services/MenuService";
-import { useEffect } from "react";
-import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { MyContext } from "@/MyContext";
-import { useContext } from "react";
+import {useEffect} from "react";
+import {useState} from "react";
+import {useSearchParams} from "react-router-dom";
+import {useForm} from "react-hook-form";
+import {MyContext} from "@/MyContext";
+import {useContext} from "react";
 import Swal from 'sweetalert2';
 
 function MenuList() {
     const [menus, setMenus] = useState([]);
     const [searchParam, setSearchParam] = useSearchParams();
     const menuService = useMemo(() => MenuService(), []);
-    const { handleSubmit, register } = useForm();
-    const { showPopup } = useContext(MyContext);
+    const {handleSubmit, register} = useForm();
+    const {showPopup} = useContext(MyContext);
 
     const search = searchParam.get("q") || "";
     const page = searchParam.get("page") || "1";
@@ -33,16 +33,16 @@ function MenuList() {
     });
     let index = (paging.page - 1) * paging.size;
 
-    const onSubmitSearch = ({ search }) => {
-        setSearchParam({ q: search || "", page: page, size: size });
+    const onSubmitSearch = ({search}) => {
+        setSearchParam({q: search || "", page: page, size: size});
     }
     const handleNavigatePage = (number) => {
-        setSearchParam({ q: "", page: +page + number, size: size });
+        setSearchParam({q: "", page: +page + number, size: size});
     }
 
     const navigatePage = (page) => {
         if (!page) return;
-        setSearchParam({ q: "", page: page, size: size });
+        setSearchParam({q: "", page: page, size: size});
     };
 
     const onChangeSize = (e) => {
@@ -50,7 +50,7 @@ function MenuList() {
             ...paging,
             size: e.target.value,
         });
-        setSearchParam({ size: e.target.value });
+        setSearchParam({size: e.target.value});
     };
 
     const handleDelete = async (id) => {
@@ -76,7 +76,7 @@ function MenuList() {
     }
 
     useEffect(() => {
-        const getProduct = async () => {
+        const getMenu = async () => {
             try {
                 const data = await menuService.getAll({
                     q: search,
@@ -89,7 +89,7 @@ function MenuList() {
                 console.log(error);
             }
         };
-        getProduct();
+        getMenu();
     }, [menuService, search, searchParam, size, page]);
 
     return (
@@ -98,7 +98,7 @@ function MenuList() {
                 <h3>Menu List</h3>
                 <Link className="btn btn-primary" to="/dashboard/menus/new">
                     <i className="me-2">
-                        <IconPlus />
+                        <IconPlus/>
                     </i>
                     Tambah Menu
                 </Link>
@@ -106,7 +106,8 @@ function MenuList() {
             <div className="d-flex justify-content-between align-items-center mt-4">
                 <div className="row">
                     <div className="col-12">
-                        <select onChange={onChangeSize} value={size} className="form-select" name="sizeOpt" id="sizeOpt">
+                        <select onChange={onChangeSize} value={size} className="form-select" name="sizeOpt"
+                                id="sizeOpt">
                             <option value="5">5</option>
                             <option value="10">10</option>
                             <option value="25">25</option>
@@ -127,61 +128,70 @@ function MenuList() {
                 </form>
             </div>
 
-            <hr />
+            <hr/>
             <div className="table-responsive mt-4">
                 <table className="table overflow-auto">
                     <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Nama</th>
-                            <th>Harga</th>
-                            <th>Gambar</th>
-                            <th>Aksi</th>
-                        </tr>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama</th>
+                        <th>Harga</th>
+                        <th>Gambar</th>
+                        <th>Aksi</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        {menus.map((menu) => {
-                            return (
-                                <tr key={menu.id}>
-                                    <td>{++index}</td>
-                                    <td>{menu.name}</td>
-                                    <td>{menu.price}</td>
-                                    <td>
-                                        <img
-                                            className="img-fluid"
-                                            width={100}
-                                            height={100}
-                                            src={menu.image.url}
-                                            alt={menu.image.name}
-                                        />
-                                    </td>
-                                    <td>
-                                        <div className="btn-group">
-                                            <Link
-                                                to={`/dashboard/menus/update/${menu.id}`}
-                                                className="btn btn-primary">
-                                                <i>
-                                                    <IconEditCircle />
-                                                </i>
-                                            </Link>
-                                            <button
-                                                onClick={() => handleDelete(menu.id)}
-                                                className="btn btn-danger">
-                                                <i className="text-white">
-                                                    <IconTrash />
-                                                </i>
-                                            </button>
-                                        </div>
-                                    </td>
+                    {
+                        menus.length < 1 ?
+                            <>
+                                <tr>
+                                    <td colSpan="6" style={{textAlign: "center"}}>Tidak Ada Data</td>
                                 </tr>
-                            );
-                        })}
+                            </>
+                            :
+                            menus.map((menu) => {
+                                return (
+                                    <tr key={menu.id}>
+                                        <td>{++index}</td>
+                                        <td>{menu.name}</td>
+                                        <td>{menu.price}</td>
+                                        <td>
+                                            <img
+                                                className="img-fluid"
+                                                width={100}
+                                                height={100}
+                                                src={menu.image.url}
+                                                alt={menu.image.name}
+                                            />
+                                        </td>
+                                        <td>
+                                            <div className="btn-group">
+                                                <Link
+                                                    to={`/dashboard/menus/update/${menu.id}`}
+                                                    className="btn btn-primary">
+                                                    <i>
+                                                        <IconEditCircle/>
+                                                    </i>
+                                                </Link>
+                                                <button
+                                                    onClick={() => handleDelete(menu.id)}
+                                                    className="btn btn-danger">
+                                                    <i className="text-white">
+                                                        <IconTrash/>
+                                                    </i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
                     </tbody>
                 </table>
             </div>
 
             <div className="d-flex align-items-center justify-content-between mt-4">
-                <small>Show data {paging.size} of {paging.totalElement}</small>
+                <small>Show
+                    data {((paging.page - 1) * paging.size) + 1} to {paging.size * paging.page > paging.totalElement ? paging.totalElement : paging.size * paging.page} of {paging.totalElement} entries</small>
                 <nav aria-label="Page navigation example">
                     <ul className="pagination">
                         <li
@@ -201,7 +211,7 @@ function MenuList() {
                                 <li
                                     key={index}
                                     className={`page-item ${paging.page === currentPage ? "active" : ""
-                                        }`}
+                                    }`}
                                 >
                                     <button
                                         onClick={() => navigatePage(currentPage)}

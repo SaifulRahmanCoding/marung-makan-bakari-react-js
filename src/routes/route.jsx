@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import {createBrowserRouter} from "react-router-dom";
 import Login from "@pages/Authentication/Login";
 import ProtectedRoute from "./ProtectedRoute";
 import DashboardLayout from "@/layout/DashboardLayout";
@@ -11,80 +11,99 @@ import MenuList from "@/pages/Menu/components/MenuList";
 import MenuForm from "@/pages/Menu/components/MenuForm";
 import Customer from "@/pages/Customer/Customer";
 import CustomerList from "@/pages/Customer/components/CustomerList";
-import CosutomerForm from "@/pages/Customer/components/CosutomerForm";
+import CosutomerUpdate from "@pages/Customer/components/CosutomerUpdate.jsx";
+import CustomerCreate from "@pages/Customer/components/CustomerCreate.jsx";
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <Login />
+        element: <Login/>
     },
     {
         path: "/login",
-        element: <Login />
+        element: <Login/>
     },
     {
         path: "/dashboard",
         element: (
             <ProtectedRoute>
-                <DashboardLayout />
+                <DashboardLayout/>
             </ProtectedRoute>
         ),
         children: [
             {
                 index: true,
-                element: <Dashboard />
+                element: <Dashboard/>
             },
             {
                 path: "tables",
-                element: <Table />,
+                element: <Table/>,
                 children: [
                     {
                         index: true,
-                        element: <TableList />,
+                        element: <TableList/>,
                     },
                     {
                         path: "new",
-                        element: <TableForm />,
+                        element: <TableForm/>,
                     },
                     {
                         path: "update/:id",
-                        element: <TableForm />,
+                        element: <TableForm/>,
                     },
                 ],
             },
             {
                 path: "menus",
-                element: <Menu />,
+                element: <Menu/>,
                 children: [
                     {
                         index: true,
-                        element: <MenuList />,
+                        element: <MenuList/>,
                     },
                     {
                         path: "new",
-                        element: <MenuForm />,
+                        element: <MenuForm/>,
                     },
                     {
                         path: "update/:id",
-                        element: <MenuForm />,
+                        element: <MenuForm/>,
                     },
                 ],
             },
             {
                 path: "customers",
-                element: <Customer />,
+                element: <Customer/>,
                 children: [
                     {
                         index: true,
-                        element: <CustomerList />,
+                        element: <CustomerList pageName="customer"/>,
                     },
                     {
                         path: "new",
-                        element: <CosutomerForm />,
+                        element: <CustomerCreate pageName="customer"/>,
                     },
                     {
                         path: "update/:id",
-                        element: <CosutomerForm />,
+                        element: <CosutomerUpdate pageName="customer"/>,
+                    },
+                ],
+            },
+            {
+                path: "admin",
+                element: <Customer/>,
+                children: [
+                    {
+                        index: true,
+                        element: <CustomerList pageName="admin"/>,
+                    },
+                    {
+                        path: "new",
+                        element: <CustomerCreate pageName="admin"/>,
+                    },
+                    {
+                        path: "update/:id",
+                        element: <CosutomerUpdate pageName="admin"/>,
                     },
                 ],
             },

@@ -1,41 +1,47 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {useForm} from "react-hook-form";
 import * as z from "zod";
 import CustomerService from "@/services/CustomerService";
-import { useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
-import { useEffect } from "react";
-import { IconX } from "@tabler/icons-react";
-import { IconDeviceFloppy } from "@tabler/icons-react";
-import { useMemo } from "react";
-import { useContext } from "react";
-import { MyContext } from "@/MyContext";
+import {useNavigate} from "react-router-dom";
+import {useParams} from "react-router-dom";
+import {useEffect} from "react";
+import {IconX} from "@tabler/icons-react";
+import {IconDeviceFloppy} from "@tabler/icons-react";
+import {useContext} from "react";
+import {MyContext} from "@/MyContext";
+
 const schema = z.object({
     id: z.string().optional(),
     name: z.string().min(1, "name wajib di isi!"),
     mobilePhoneNo: z.string().min(10, "nomor handphone harus lebih daari 10 karakter!"),
 });
-function CosutomerForm() {
+
+function CosutomerUpdate({pageName}) {
     const {
         register,
         handleSubmit,
-        formState: { errors, isValid },
+        formState: {errors, isValid},
         clearErrors,
         reset,
         setValue,
+        trigger,
     } = useForm({
         mode: "onChange",
         resolver: zodResolver(schema),
     });
 
     const navigate = useNavigate();
-    const customerService = useMemo(() => CustomerService(), []);
-    const { id } = useParams();
-    const { showPopup } = useContext(MyContext);
+    const customerService = CustomerService();
+    const {id} = useParams();
+    const {showPopup} = useContext(MyContext);
+
+    function capitalizeFirstWord(sentence) {
+        return sentence.charAt(0).toUpperCase() + sentence.slice(1);
+    }
 
     const handleBack = () => {
         clearForm();
-        navigate("/dashboard/customers");
+        navigate(pageName !== "admin" ? "/dashboard/customers" : "/dashboard/admin");
     };
     const clearForm = () => {
         clearErrors();
@@ -43,7 +49,6 @@ function CosutomerForm() {
     }
     const onSubmit = async (data) => {
         try {
-
             if (id) {
                 const customer = {
                     id: id,
@@ -52,12 +57,9 @@ function CosutomerForm() {
                 };
                 const response = await customerService.update(customer);
                 showPopup("Update", response.statusCode)
-            } else {
-                await customerService.create(data);
             }
             clearForm();
-            navigate("/dashboard/customers");
-
+            navigate(pageName !== "admin" ? "/dashboard/customers" : "/dashboard/admin");
         } catch (error) {
             console.log(error);
         }
@@ -71,17 +73,18 @@ function CosutomerForm() {
                     setValue("id", currentCustomer.id);
                     setValue("name", currentCustomer.name);
                     setValue("mobilePhoneNo", currentCustomer.mobilePhoneNo);
+                    await trigger();
                 } catch (error) {
                     console.log(error);
                 }
             };
             getTablesById();
         }
-    }, [id, customerService, setValue]);
+    }, [id, setValue, trigger]);
     return (
         <div>
             <div className="shadow-sm p-4 rounded-2">
-                <h2 className="mb-4">Form customer</h2>
+                <h2 className="mb-4">Update {capitalizeFirstWord(pageName.toString())}</h2>
                 <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
                     <div className="mb-3">
                         <label htmlFor="name" className="form-label required">
@@ -120,7 +123,7 @@ function CosutomerForm() {
                             className="d-flex align-items-center btn btn-primary"
                         >
                             <i className="me-2">
-                                <IconDeviceFloppy />
+                                <IconDeviceFloppy/>
                             </i>
                             Simpan
                         </button>
@@ -130,7 +133,7 @@ function CosutomerForm() {
                             className="d-flex align-items-center btn btn-danger text-white"
                         >
                             <i className="me-2">
-                                <IconX />
+                                <IconX/>
                             </i>
                             Batal
                         </button>
@@ -141,4 +144,4 @@ function CosutomerForm() {
     )
 }
 
-export default CosutomerForm
+export default CosutomerUpdate

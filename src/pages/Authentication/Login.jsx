@@ -73,20 +73,9 @@ function Login() {
 
   return (
     <>
-      <div className="d-flex">
-        <Link
-          to="/"
-          className="user-select-all p-4 d-flex align-items-center gap-2 text-decoration-none"
-        >
-          <span>
-            <IconArrowLeft />
-          </span>
-          Kembali ke Home
-        </Link>
-      </div>
       <div
-        className="container d-flex justify-content-center align-items-center"
-        style={{ minHeight: "80vh" }}
+        className="container d-flex justify-content-center align-items-center "
+        style={{ height: "100vh" }}
       >
         <div className="shadow-lg rounded-4" style={{ width: 500 }}>
           <form onSubmit={handleSubmit(onSubmit)} className="p-4">

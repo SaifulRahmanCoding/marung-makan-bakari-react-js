@@ -10,6 +10,10 @@ const CustomerService = () => {
         const { data } = await axiosInstance.post("/auth/register", payload);
         return data;
     }
+    const createAdmin = async (payload) => {
+        const { data } = await axiosInstance.post("/auth/register/admin", payload);
+        return data;
+    }
     const getById = async (id) => {
         const { data } = await axiosInstance.get(`/customers/${id}`);
         return data;
@@ -31,6 +35,7 @@ const CustomerService = () => {
     return {
         getAll,
         create,
+        createAdmin,
         getById,
         update,
         updateStatus,
