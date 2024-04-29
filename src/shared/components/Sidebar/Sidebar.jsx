@@ -7,7 +7,6 @@ import {
     IconListDetails,
     IconUsers,
     IconReceipt,
-    IconUser,
     IconAccessible,
 } from "@tabler/icons-react";
 import PropTypes from "prop-types";
