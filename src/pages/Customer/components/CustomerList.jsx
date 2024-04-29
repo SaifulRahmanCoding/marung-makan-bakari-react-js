@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 import {useSearchParams} from "react-router-dom";
 import {useForm} from "react-hook-form";
 
+// eslint-disable-next-line react/prop-types
 function CustomerList({pageName}) {
     const [customers, setCustomers] = useState([]);
     const [searchParam, setSearchParam] = useSearchParams();
@@ -118,7 +119,7 @@ function CustomerList({pageName}) {
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <h3>{capitalizeFirstWord(pageName.toString())} List</h3>
                 <Link className="btn btn-primary"
-                      to={pageName !== "admin" ? "/dashboard/customers/new" : "/dashboard/admin/new"}>
+                      to={pageName !== "admin" ? "/dashboard/customer/new" : "/dashboard/admin/new"}>
                     <i className="me-2">
                         <IconPlus/>
                     </i>
@@ -192,7 +193,7 @@ function CustomerList({pageName}) {
                                         <td>
                                             <div className="btn-group">
                                                 <Link
-                                                    to={pageName !== "admin" ? `/dashboard/customers/update/${customer.id}` : `/dashboard/admin/update/${customer.id}`}
+                                                    to={pageName !== "admin" ? `/dashboard/customer/update/${customer.id}` : `/dashboard/admin/update/${customer.id}`}
                                                     className="btn btn-primary">
                                                     <i><IconEditCircle/></i>
                                                 </Link>
@@ -214,7 +215,7 @@ function CustomerList({pageName}) {
 
             <div className="d-flex align-items-center justify-content-between mt-4">
                 <small>Show
-                    data {((paging.page - 1) * paging.size) + 1} to {paging.size * paging.page > paging.totalElement ? paging.totalElement : paging.size * paging.page} of {paging.totalElement} entries</small>
+                    data {((paging.page - 1) * paging.size) + 1} to {paging.size * paging.page > customers.length ? customers.length : paging.size * paging.page} of {customers.length} entries</small>
                 <nav aria-label="Page navigation example">
                     <ul className="pagination">
                         <li

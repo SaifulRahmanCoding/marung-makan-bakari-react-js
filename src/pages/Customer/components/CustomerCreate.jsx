@@ -38,7 +38,7 @@ function CustomerCreate({pageName}) {
 
     const handleBack = () => {
         clearForm();
-        navigate("/dashboard/customers");
+        navigate("/dashboard/customer");
     };
     const clearForm = () => {
         clearErrors();
@@ -62,7 +62,7 @@ function CustomerCreate({pageName}) {
             }
             showPopup("Tambah", responseCreateUser.statusCode);
             clearForm();
-            navigate(pageName !== "admin" ? "/dashboard/customers" : "/dashboard/admin");
+            navigate(pageName !== "admin" ? "/dashboard/customer" : "/dashboard/admin");
         } catch (error) {
             console.log(error);
         }

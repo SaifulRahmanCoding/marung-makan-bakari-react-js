@@ -14,7 +14,7 @@ const schema = z.object({
     id: z.string().optional(),
     name: z.string().min(1, "name wajib di isi!"),
     price: z
-        .string()
+        .number()
         .refine((val) => !isNaN(parseFloat(val)), "Harga harus berupa angka")
         .transform((val) => parseInt(val))
         .refine((val) => val > 0, "harga harus lebih dari 0"),
@@ -51,7 +51,7 @@ function MenuForm() {
 
     const handleBack = () => {
         clearForm();
-        navigate("/dashboard/menus");
+        navigate("/dashboard/menu");
     };
 
     const onSubmit = async (data) => {
@@ -92,7 +92,7 @@ function MenuForm() {
                 }
             }
             clearForm();
-            navigate("/dashboard/menus");
+            navigate("/dashboard/menu");
         } catch (err) {
             console.log(err);
         }

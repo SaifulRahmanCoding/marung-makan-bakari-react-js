@@ -29,7 +29,7 @@ function TableList() {
         try {
             const response = await tableService.deleteById(id);
             showPopup("Hapus", response.statusCode);
-            if (response.statusCode == 200) {
+            if (response.statusCode === 200) {
                 const data = await tableService.getAll();
                 setTables(data.data);
             }
@@ -54,7 +54,7 @@ function TableList() {
         <div className="p-4 shadow-sm rounded-2">
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <h3>Table List</h3>
-                <Link className="btn btn-primary" to="/dashboard/tables/new">
+                <Link className="btn btn-primary" to="/dashboard/table/new">
                     <i className="me-2">
                         <IconPlus/>
                     </i>
@@ -88,7 +88,7 @@ function TableList() {
                                         <td>
                                             <div className="btn-group">
                                                 <Link
-                                                    to={`/dashboard/tables/update/${table.id}`}
+                                                    to={`/dashboard/table/update/${table.id}`}
                                                     className="btn btn-primary">
                                                     <i>
                                                         <IconEditCircle/>

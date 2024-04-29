@@ -66,7 +66,7 @@ function MenuList() {
         try {
             const response = await menuService.deleteById(id);
             showPopup("Hapus", response.statusCode);
-            if (response.statusCode == 200) {
+            if (response.statusCode === 200) {
                 const data = await menuService.getAll();
                 setMenus(data.data);
             }
@@ -96,7 +96,7 @@ function MenuList() {
         <div className="p-4 shadow-sm rounded-2">
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <h3>Menu List</h3>
-                <Link className="btn btn-primary" to="/dashboard/menus/new">
+                <Link className="btn btn-primary" to="/dashboard/menu/new">
                     <i className="me-2">
                         <IconPlus/>
                     </i>
@@ -167,7 +167,7 @@ function MenuList() {
                                         <td>
                                             <div className="btn-group">
                                                 <Link
-                                                    to={`/dashboard/menus/update/${menu.id}`}
+                                                    to={`/dashboard/menu/update/${menu.id}`}
                                                     className="btn btn-primary">
                                                     <i>
                                                         <IconEditCircle/>

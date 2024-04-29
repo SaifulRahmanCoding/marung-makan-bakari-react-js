@@ -41,7 +41,7 @@ function CosutomerUpdate({pageName}) {
 
     const handleBack = () => {
         clearForm();
-        navigate(pageName !== "admin" ? "/dashboard/customers" : "/dashboard/admin");
+        navigate(pageName !== "admin" ? "/dashboard/customer" : "/dashboard/admin");
     };
     const clearForm = () => {
         clearErrors();
@@ -59,7 +59,7 @@ function CosutomerUpdate({pageName}) {
                 showPopup("Update", response.statusCode)
             }
             clearForm();
-            navigate(pageName !== "admin" ? "/dashboard/customers" : "/dashboard/admin");
+            navigate(pageName !== "admin" ? "/dashboard/customer" : "/dashboard/admin");
         } catch (error) {
             console.log(error);
         }

@@ -82,7 +82,7 @@ export default function Sidebar({isVisible, setVisible, handleLogout}) {
                             </li>
                             <li className="cursor-pointer">
                                 <Link
-                                    to="/dashboard/menus"
+                                    to="/dashboard/menu"
                                     className="text-white text-decoration-none"
                                 >
                                     <i className="me-3">
@@ -93,7 +93,7 @@ export default function Sidebar({isVisible, setVisible, handleLogout}) {
                             </li>
                             <li className="cursor-pointer">
                                 <Link
-                                    to="/dashboard/tables"
+                                    to="/dashboard/table"
                                     className="text-white text-decoration-none"
                                 >
                                     <i className="me-3">
@@ -104,7 +104,7 @@ export default function Sidebar({isVisible, setVisible, handleLogout}) {
                             </li>
                             <li className="cursor-pointer">
                                 <Link
-                                    to="/dashboard/customers"
+                                    to="/dashboard/customer"
                                     className="text-white text-decoration-none"
                                 >
                                     <i className="me-3">
@@ -137,18 +137,6 @@ export default function Sidebar({isVisible, setVisible, handleLogout}) {
                                 <IconReceipt/>
                             </i>
                             <span>Transaction</span>
-                        </Link>
-                    </li>
-                    <p className="fw-bold mt-4">Settings</p>
-                    <li className="cursor-pointer text-white">
-                        <Link
-                            className="text-white text-decoration-none"
-                            to="/dashboard/user"
-                        >
-                            <i className="me-3">
-                                <IconUser/>
-                            </i>
-                            <span>User</span>
                         </Link>
                     </li>
                     <hr/>

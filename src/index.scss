@@ -37,11 +37,22 @@ body {
   display: none;
   min-height: 100dvh;
 }
+
 .welcome-dashboard {
   background-color: #cefee78d;
   color: #66bc6b !important;
 }
-.badge-status-member{
+
+.badge-status-member {
   cursor: pointer;
 }
+
+.page-not-found {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
 @import "node_modules/bootstrap/scss/bootstrap";

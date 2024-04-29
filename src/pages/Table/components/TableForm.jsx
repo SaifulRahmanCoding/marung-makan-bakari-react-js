@@ -35,7 +35,7 @@ function TableForm() {
 
     const handleBack = () => {
         clearForm();
-        navigate("/dashboard/tables");
+        navigate("/dashboard/table");
     };
     const clearForm = () => {
         clearErrors();
@@ -56,7 +56,7 @@ function TableForm() {
                 showPopup("Tambah", response.statusCode)
             }
             clearForm();
-            navigate("/dashboard/tables");
+            navigate("/dashboard/table");
 
         } catch (error) {
             console.log(error);
