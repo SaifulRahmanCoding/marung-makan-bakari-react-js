@@ -13,8 +13,15 @@ import Customer from "@/pages/Customer/Customer";
 import CustomerList from "@/pages/Customer/components/CustomerList";
 import CosutomerUpdate from "@pages/Customer/components/CosutomerUpdate.jsx";
 import CustomerCreate from "@pages/Customer/components/CustomerCreate.jsx";
+import NotFound from "@shared/components/Error/NotFound.jsx";
+import TransactionList from "@pages/Transaction/components/TransactionList.jsx";
+import TransactionOrder from "@pages/Transaction/components/TransactionOrder.jsx";
 
 const router = createBrowserRouter([
+    {
+        path: "*",
+        element: <NotFound/>
+    },
     {
         path: "/",
         element: <Login/>
@@ -36,7 +43,7 @@ const router = createBrowserRouter([
                 element: <Dashboard/>
             },
             {
-                path: "tables",
+                path: "table",
                 element: <Table/>,
                 children: [
                     {
@@ -54,7 +61,7 @@ const router = createBrowserRouter([
                 ],
             },
             {
-                path: "menus",
+                path: "menu",
                 element: <Menu/>,
                 children: [
                     {
@@ -72,7 +79,7 @@ const router = createBrowserRouter([
                 ],
             },
             {
-                path: "customers",
+                path: "customer",
                 element: <Customer/>,
                 children: [
                     {
@@ -104,6 +111,20 @@ const router = createBrowserRouter([
                     {
                         path: "update/:id",
                         element: <CosutomerUpdate pageName="admin"/>,
+                    },
+                ],
+            },
+            {
+                path: "transaction",
+                element: <Customer/>,
+                children: [
+                    {
+                        index: true,
+                        element: <TransactionList/>,
+                    },
+                    {
+                        path: "order",
+                        element: <TransactionOrder/>,
                     },
                 ],
             },
