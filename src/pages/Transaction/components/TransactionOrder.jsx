@@ -5,8 +5,9 @@ import TableService from "@services/TableService.js";
 import CustomerService from "@services/CustomerService.js";
 import {Typeahead} from "react-bootstrap-typeahead";
 import TransactionService from "@services/TransactionService.js";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import {MyContext} from "@/MyContext.js";
+import {useForm} from "react-hook-form";
 
 function TransactionOrder() {
     const [menus, setMenus] = useState([]);
@@ -21,8 +22,30 @@ function TransactionOrder() {
     const transactionService = TransactionService();
     const navigate = useNavigate();
     const {showPopup} = useContext(MyContext);
+    const [searchParam, setSearchParam] = useSearchParams();
+    const {handleSubmit, register} = useForm();
 
     let amount = 0
+    const search = searchParam.get("q") || "";
+    const page = searchParam.get("page") || "1";
+    const size = "12";
+
+    const [paging, setPaging] = useState({
+        page: page,
+        size: size,
+        totalElement: 0,
+        totalPages: 1,
+        hasPrevious: false,
+        hasNext: false,
+    });
+    const onSubmitSearch = ({search}) => {
+        setSearchParam({q: search || "", page: page, size: size});
+    }
+
+    const handleNavigatePage = (number) => {
+        setSearchParam({q: "", page: +page + number, size: size});
+    }
+
     const convertToRupiah = (price) => {
         return new Intl.NumberFormat("id-ID", {
             style: "currency",
@@ -103,10 +126,15 @@ function TransactionOrder() {
     useEffect(() => {
         const getMenu = async () => {
             try {
-                const dataMenu = await menuService.getAll();
+                const dataMenu = await menuService.getAll({
+                    q: search,
+                    size: size,
+                    page: page,
+                });
                 const dataTable = await tableService.getAll();
                 const dataCustomer = await customerService.getAll();
                 setMenus(dataMenu.data);
+                setPaging(dataMenu.paging);
                 setTables(dataTable.data);
                 setCustomers(dataCustomer.data);
             } catch (error) {
@@ -114,7 +142,7 @@ function TransactionOrder() {
             }
         };
         getMenu();
-    }, [menuService, tableService, customerService]);
+    }, [menuService, tableService, customerService, search, page]);
     return (
         <div id="top" className="d-flex">
             <div className="col-7 p-1">
@@ -122,12 +150,46 @@ function TransactionOrder() {
                     <h4 className="mb-4">List Menu</h4>
                     <div className="row">
                         <div className="col-6 mb-4">
-                            <form autoComplete="off">
-                                <input className="form-control" placeholder="Search"/>
+                            <form onSubmit={handleSubmit(onSubmitSearch)} autoComplete="off">
+                                <input
+                                    {...register("search")}
+                                    placeholder="search"
+                                    className="form-control"
+                                    type="search"
+                                    name="search"
+                                    id="search"
+                                />
                             </form>
                         </div>
-                        <div className="col-6 px-2">
-
+                        <div className="col-6">
+                            <div className="d-flex justify-content-between">
+                                <small>Show
+                                    data {((paging.page - 1) * paging.size) + 1} to {paging.size * paging.page > paging.totalElement ? paging.totalElement : paging.size * paging.page} of {paging.totalElement} entries</small>
+                                <nav aria-label="Page navigation example">
+                                    <ul className="pagination">
+                                        <li
+                                            className={`page-item ${!paging.hasPrevious ? "disabled" : ""}`}
+                                        >
+                                            <button
+                                                disabled={!paging.hasPrevious}
+                                                onClick={() => handleNavigatePage(-1)}
+                                                className="page-link"
+                                            >
+                                                Previous
+                                            </button>
+                                        </li>
+                                        <li className={`page-item ${!paging.hasNext ? "disabled" : ""}`}>
+                                            <button
+                                                disabled={!paging.hasNext}
+                                                className="page-link"
+                                                onClick={() => handleNavigatePage(1)}
+                                            >
+                                                Next
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
                         </div>
                     </div>
                     <div className="row" style={{height: "70vh", overflowY: "auto"}}>

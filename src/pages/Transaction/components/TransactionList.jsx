@@ -26,8 +26,8 @@ function TransactionList() {
         hasNext: false,
     });
     let index = (paging.page - 1) * paging.size;
-    const onSubmitSearch = ({search}) => {
-        setSearchParam({q: search || "", page: page, size: size});
+    const onChangeDateSearch = (e) => {
+        setSearchParam({q: e.target.value || "", page: page, size: size});
     }
     const handleNavigatePage = (number) => {
         setSearchParam({q: "", page: +page + number, size: size});
@@ -101,12 +101,11 @@ function TransactionList() {
                         </select>
                     </div>
                 </div>
-                <form onSubmit={handleSubmit(onSubmitSearch)} autoComplete="off">
+                <form onChange={onChangeDateSearch} autoComplete="off">
                     <input
                         {...register("search")}
-                        placeholder="search"
                         className="form-control"
-                        type="search"
+                        type="datetime-local"
                         name="search"
                         id="search"
                     />
