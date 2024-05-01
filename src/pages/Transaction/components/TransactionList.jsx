@@ -81,7 +81,7 @@ function TransactionList() {
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <h3>Transaction List</h3>
                 <Link className="btn btn-primary"
-                      to={"/dashboard/transaction/new"}>
+                      to={"/dashboard/transaction/order"}>
                     <i className="me-2">
                         <IconPlus/>
                     </i>

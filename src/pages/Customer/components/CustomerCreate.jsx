@@ -16,6 +16,7 @@ const schema = z.object({
     mobilePhoneNo: z.string().min(10, "nomor handphone harus lebih dari 10 karakter!"),
 });
 
+// eslint-disable-next-line react/prop-types
 function CustomerCreate({pageName}) {
     const {
         register,
@@ -46,11 +47,11 @@ function CustomerCreate({pageName}) {
     }
     const onSubmit = async (data) => {
         try {
+            if (data.password !== data.repassword) return showPopup("Tambah", 400, "password yang anda input tidak sama");
             const user = {
                 username: data.username,
                 password: data.password,
             };
-            if (data.password !== data.repassword) return showPopup("Tambah", 400, "password yang anda input tidak sama");
             const responseCreateUser = pageName !== "admin" ? await customerService.create(user) : await customerService.createAdmin(user);
             if (responseCreateUser.statusCode === 201) {
                 const customer = {

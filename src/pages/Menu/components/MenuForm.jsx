@@ -14,7 +14,7 @@ const schema = z.object({
     id: z.string().optional(),
     name: z.string().min(1, "name wajib di isi!"),
     price: z
-        .number()
+        .string()
         .refine((val) => !isNaN(parseFloat(val)), "Harga harus berupa angka")
         .transform((val) => parseInt(val))
         .refine((val) => val > 0, "harga harus lebih dari 0"),
@@ -85,9 +85,9 @@ function MenuForm() {
                     form.append("menu", JSON.stringify(menu));
                     form.append("image", data.image[0]);
                     const response = await menuService.create(form);
-                    console.log(response.statusCode);
                     showPopup("Tambah", response.statusCode);
                 } catch (err) {
+                    showPopup("Tambah", 400);
                     console.log(err);
                 }
             }
